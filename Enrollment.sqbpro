@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="Enrollment.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="568"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title=".Browsables" custom_title="0" dock_id="1" table="0,10:Browsables"/><dock_state state="000000ff00000000fd00000001000000020000000000000000fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000ffffffff0000011700ffffff000000000000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1*">CREATE TABLE Students (
+    student_id INTEGER PRIMARY KEY,
+    name TEXT
+);
+
+INSERT INTO Students VALUES
+(1, 'JaSun'),
+(2, 'Jamu'),
+(3, 'John'),
+(4, 'Jane'),
+(5, 'Morris');
+
+
+CREATE TABLE Courses (
+    course_id TEXT,
+    department TEXT
+);
+
+INSERT INTO Courses VALUES
+('COS109', 'Computer Science'),
+('ENG201', 'English'),
+('MAT115', 'Math');
+
+
+CREATE TABLE Enrollments (
+    student_id INTEGER,
+    course_id TEXT,
+    term TEXT,
+    grade INTEGER
+);
+
+INSERT INTO Enrollments VALUES
+(1, 'COS109', 'Fall 2025', 90),
+(2, 'COS109', 'Fall 2025', 85),
+(3, 'ENG201', 'Fall 2025', 80),
+(4, 'MTH115', 'Spring 2026', 88),
+(5, 'COS109', 'Spring 2026', 92),
+(1, 'ENG201', 'Spring 2026', 84);
+
+CREATE TABLE Enrollment_Summary AS
+SELECT 
+    e.term,
+    c.department,
+    e.course_id,
+    COUNT(e.student_id) AS total_students,
+    AVG(e.grade) AS avg_grade
+FROM Enrollments e
+JOIN Courses c ON e.course_id = c.course_id
+GROUP BY e.term, c.department, e.course_id;
+
+SELECT COUNT(DISTINCT student_id) AS total_students FROM Enrollments;
+
+SELECT COUNT(DISTINCT course_id) AS total_courses FROM Courses;
+
+SELECT ROUND(AVG(grade), 2) AS avg_grade FROM Enrollments;
+
+
+SELECT term, COUNT(student_id) AS students
+FROM Enrollments
+GROUP BY term;
+
+
+SELECT c.department, COUNT(e.student_id) AS students
+FROM Enrollments e
+JOIN Courses c ON e.course_id = c.course_id
+GROUP BY c.department;
+
+
+SELECT course_id, COUNT(student_id) AS students
+FROM Enrollments
+GROUP BY course_id;</sql><current_tab id="0"/></tab_sql></sqlb_project>
